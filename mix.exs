@@ -15,7 +15,9 @@ defmodule Genom.Mixfile do
     [applications:  [
                       :logger,
                       :yamler,
-                      
+                      :httpoison,
+                      :retry,
+
                       :tinca,
                       :hashex
                     ],
@@ -34,6 +36,8 @@ defmodule Genom.Mixfile do
   defp deps do
     [
       {:yamler, github: "goertzenator/yamler", branch: "mapping_as_map"},
+      {:httpoison, github: "edgurgel/httpoison"},
+      {:retry, github: "d0rc/retry"},
 
       {:tinca, github: "timCF/tinca"},
       {:exutils, github: "timCF/exutils"},

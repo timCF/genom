@@ -33,10 +33,26 @@ defmodule Genom.Unit do
 			port: Genom.Tinca.get(:my_port)
 			stamp: Exutils.makestamp }}
 	end
-
-	defp report_to_master slave = %SlaveState{port: my_port} do
-		
+	defp report_to_master( state = %SlaveState{my_info: my_info = %AppInfo{ port: my_port }} ) do
+		case try_report_to_master(my_info, my_port) do
+			{:ok, _} -> :ok
+			err -> 	Logger.warn "Genom.Unit : report to master failed, code is #{inspect err}"
+					:failed
+		end
+	end
+	defp try_report_to_master(my_info, my_port) do
+		Retry.run( %{sleep: 500, tries: 3}, 
+			fn() -> 
+				%HTTPoison.Response{status_code: 200, body: "ok"} = HTTPoison.post("http://localhost:#{my_port}/inner",
+				[app_info: my_info |> :erlang.term_to_binary |> :base64.encode] |> Exutils.HTTP.make_args,
+				[{"Content-Type","application/x-www-form-urlencoded"}])
+			end )
 	end
 
+
+
+	defp became_master do
+		
+	end
 
 end

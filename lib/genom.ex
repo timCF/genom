@@ -10,6 +10,7 @@ defmodule Genom do
   end
 
 
+
   defmacro add_info(value, key) do
     quote do
       Genom.ModulesCacheWriter.add_info(__MODULE__, unquote(key), unquote(value))
@@ -17,17 +18,13 @@ defmodule Genom do
   end
 
 
-  defmodule ModuleInfo do
-    @derive [HashUtils]
-    defstruct module: nil, key: nil, info: nil
-  end
+
   # role = :master | :slave
   # status = :alive | :dead
   defmodule AppInfo do
     @derive [HashUtils]
     defstruct id: nil, role: :slave, status: :dead, modules_info: nil, port: nil stamp: 0
   end
-
   defmodule HostInfo do
     @derive [HashUtils]
     defstruct apps: %{}, host: nil, port: nil, stamp: 0, status: :dead
@@ -53,7 +50,6 @@ defmodule Genom do
   end
 
 
-
   # get here other hosts settings, own port, generate own id, and store all this info to hash
   defp store_my_info_to_hash env do
     get_conf_file_path(env) |> store_hosts
@@ -77,7 +73,6 @@ defmodule Genom do
       some when (is_integer(some) and (some > 0)) -> Tinca.put( some, :my_port )
     end
   end
-
 
 
   defp get_conf_file_path(env) do

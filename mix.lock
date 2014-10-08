@@ -1,0 +1,3 @@
+%{"exutils": {:git, "git://github.com/timCF/exutils.git", "b3671ae9a9a3b69ee3b2b238b9cdaa8122d49ffe", []},
+  "hashex": {:git, "git://github.com/timCF/hashex.git", "c7ca84eb4659615c822b28a67eac0d2b45fcfe9d", []},
+  "tinca": {:git, "git://github.com/timCF/tinca.git", "0682148a9452052b52e5476273b551ec57dcde9c", []}}
