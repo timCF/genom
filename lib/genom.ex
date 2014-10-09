@@ -13,7 +13,7 @@ defmodule Genom do
 
   defmacro add_info(value, key) do
     quote do
-      Genom.ModulesCacheWriter.add_info(__MODULE__, unquote(key), unquote(value))
+      Genom.ModulesCacheWriter.add_info(__MODULE__, unquote(key), { Exutils.makestamp, unquote(value) } )
     end
   end
 
@@ -23,7 +23,7 @@ defmodule Genom do
   # status = :alive | :dead
   defmodule AppInfo do
     @derive [HashUtils]
-    defstruct id: nil, role: :slave, status: :dead, modules_info: nil, port: nil stamp: 0
+    defstruct id: nil, role: :slave, status: :alive, modules_info: nil, port: nil, stamp: 0
   end
   defmodule HostInfo do
     @derive [HashUtils]
