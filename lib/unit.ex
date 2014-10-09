@@ -28,8 +28,9 @@ defmodule Genom.Unit do
 
 	#
 	#	TODO : defcall from cowboy - incoming hostinfo
+	#	dynamically can add new hosts))
 	#
-
+	#
 
 
 	definfo :timeout, state: state = %SlaveState{} do
@@ -140,10 +141,9 @@ defmodule Genom.Unit do
 	defp refresh_other_hosts(state = %MasterState{}) do
 		HashUtils.modify_all(state, :other_hosts, 
 			fn(hostinfo = %Genom.HostInfo{host: host, port: port, stamp: stamp}) ->
-				case (Exutils.makestamp - stamp) > @host_death_timeout do
-					false -> 	try_send_my_hostinfo(host, port, prepare_host_info(state) )
-								hostinfo
+				case ((Exutils.makestamp - stamp) > @host_death_timeout) and (try_send_my_hostinfo(host, port, prepare_host_info(state)) != :ok ) do
 					true -> HashUtils.set(hostinfo, :status, :dead)
+					false -> hostinfo
 				end
 			end )
 	end
@@ -173,7 +173,7 @@ defmodule Genom.Unit do
 	defp try_send_my_hostinfo(host, port, my_hostinfo_bin) do
 		case Retry.run( %{sleep: 500, tries: 5}, try_send_my_hostinfo_process(host, port, my_hostinfo_bin)) do
 			{:ok, _} -> :ok
-			err -> 	Logger.warn "Genom.Unit : exchange with host #{host} and port #{port} failed, code is #{inspect err}"
+			err -> 	Logger.warn "Genom.Unit : exchange with host #{host}:#{port} failed, code is #{inspect err}"
 		end
 	end
 	defp try_send_my_hostinfo_process(host, port, my_hostinfo_bin) do
