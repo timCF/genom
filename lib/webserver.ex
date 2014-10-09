@@ -13,7 +13,7 @@ defmodule Genom.WebServer do
                       {:_, [
                                {"/internal", Genom.Internal, []},
                                {"/external", Genom.External, []},
-                               {"/bullet", :bullet_handler, [{:handler, Genom.InterfaceBullet}]},
+                               {"/bullet", :bullet_handler, [{:handler, Genom.Bullet}]},
                                {"/", :cowboy_static, {:priv_file, :genom, "index.html"}},
                                {"/[...]", :cowboy_static, {:priv_dir, :genom, "", [{:mimetypes, :cow_mimetypes, :all}]}}
                         ]} ])

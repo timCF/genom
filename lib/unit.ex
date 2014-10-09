@@ -170,7 +170,7 @@ defmodule Genom.Unit do
 			end )
 	end
 	defp encode_and_put_to_cache state do
-		Exutils.prepare_to_jsonify(state, %{tuple_values_to_lists: true})
+		%Genom.Bullet.WebProtocol{ subject: "refresh", content: Exutils.prepare_to_jsonify(state, %{tuple_values_to_lists: true}) }
 			|> Jazz.encode!
 				|> Genom.Tinca.put(:web_view_cache)
 		state
