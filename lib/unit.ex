@@ -1,6 +1,7 @@
 defmodule Genom.Unit do
 	
 	use ExActor.GenServer, export: :GenomUnit
+	require Logger
 	@timeout :timer.minutes(1)
 
 	defmodule MasterState do
@@ -13,45 +14,46 @@ defmodule Genom.Unit do
 	end
 
 	definit do
-		state = create_state |> refresh_self
 		{
 			:ok, 
-			case report_to_master(state) do
-				:failed -> become_master(state)
-				:ok -> state
-			end,
+			( create_state |> main_slave_handler ),
 			@timeout
 		}
 	end
 
-
-
-	#
-	#	TODO : defcall from cowboy - incoming hostinfo
-	#	dynamically can add new hosts))
-	#
-	#
-
+	defcall add_hostinfo(host_info = %Genom.HostInfo{host: incoming_host}), state: state = %MasterState{} do
+		new_state = HashUtils.modify(state, [:other_hosts], 
+						fn(hosts_list) ->
+							[host_info|Enum.filter(hosts_list,fn(%Genom.HostInfo{host: this_host}) -> this_host != incoming_host end)]
+						end )
+		{
+			:reply,
+			"ok",
+			main_master_handler(new_state),
+			@timeout
+		}
+	end
+	defcall add_slaveinfo(slave_info = %Genom.AppInfo{id: appid}), state: state = %MasterState{} do
+		{
+			:reply,
+			"ok",
+			( HashUtils.add(state, [:slaves_info, appid], slave_info)
+				|> main_master_handler ),
+			@timeout
+		}
+	end
 
 	definfo :timeout, state: state = %SlaveState{} do
-		new_state = state |> refresh_self
 		{
 			:noreply,
-			case new_state |> report_to_master do
-				:failed -> become_master(new_state)
-				:ok -> new_state
-			end,
+			main_slave_handler(state),
 			@timeout
 		}
 	end
 	definfo :timeout, state: state = %MasterState{} do
 		{
 			:noreply,
-			refresh_self(state)
-				|> refresh_slaves
-					|> refresh_other_hosts
-						|> encode_and_put_to_cache
-							|> send_signal_to_web_viewers,
+			main_master_handler(state),
 			@timeout
 		}
 	end
@@ -66,10 +68,10 @@ defmodule Genom.Unit do
 			role: :slave,
 			status: :alive,
 			modules_info: Genom.Tinca.get(:modules_info),
-			port: Genom.Tinca.get(:my_port)
+			port: Genom.Tinca.get(:my_port),
 			stamp: Exutils.makestamp }}
 	end
-	defp become_master %SlaveState{ my_info: my_info = %Genom.AppInfo{port: port} } do
+	defp become_master %SlaveState{ my_info: my_info = %Genom.AppInfo{} } do
 		#
 		#	TODO : start web-server
 		#
@@ -94,7 +96,7 @@ defmodule Genom.Unit do
 		HashUtils.set(state, [:my_info, :modules_info],
 			Genom.Tinca.get(:modules_info))
 	end
-	defp refresh_timestamp do
+	defp refresh_timestamp(state) do
 		HashUtils.set(state, [:my_info, :stamp],
 			Exutils.makestamp)
 	end
@@ -103,7 +105,17 @@ defmodule Genom.Unit do
 	### slave priv funcs ###
 	########################
 
-	defp report_to_master( state = %SlaveState{my_info: my_info = %Genom.AppInfo{ port: my_port }} ) do
+
+	defp main_slave_handler(old_state) do
+		state = refresh_self(old_state)
+		case report_to_master(state) do
+			:failed -> become_master(state)
+			:ok -> state
+		end
+	end
+
+
+	defp report_to_master( %SlaveState{my_info: my_info = %Genom.AppInfo{ port: my_port }} ) do
 		case :erlang.term_to_binary(my_info)
 				|> :base64.encode
 					|>  try_report_to_master(my_port) do
@@ -128,6 +140,16 @@ defmodule Genom.Unit do
 
 	@slave_death_timeout :timer.minutes(3)
 	@host_death_timeout :timer.minutes(5)
+
+
+	defp main_master_handler(state) do
+		refresh_self(state)
+			|> refresh_slaves
+				|> refresh_other_hosts
+					|> encode_and_put_to_cache
+						|> send_signal_to_web_viewers
+	end
+
 
 	defp refresh_slaves(state = %MasterState{}) do
 		HashUtils.modify_all(state, :slaves_info, 

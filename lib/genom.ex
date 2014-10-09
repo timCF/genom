@@ -1,6 +1,7 @@
 defmodule Genom do
   use Application
   use Tinca, [:genom_cache]
+  require Logger
 
   @default_port 8999
 

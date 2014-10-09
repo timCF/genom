@@ -17,6 +17,9 @@ defmodule Genom.Mixfile do
                       :yamler,
                       :httpoison,
                       :retry,
+                      :exactor,
+                      :cowboy,
+                      :extask,
 
                       :tinca,
                       :hashex
@@ -38,6 +41,9 @@ defmodule Genom.Mixfile do
       {:yamler, github: "goertzenator/yamler", branch: "mapping_as_map"},
       {:httpoison, github: "edgurgel/httpoison"},
       {:retry, github: "d0rc/retry"},
+      {:exactor, github: "sasa1977/exactor"},
+      {:cowboy, github: "extend/cowboy", tag: "5ce4c2bfb40ecc4b687a2941e612025a1c4ff913"},
+      {:extask, github: "timCF/extask"},
 
       {:tinca, github: "timCF/tinca"},
       {:exutils, github: "timCF/exutils"},

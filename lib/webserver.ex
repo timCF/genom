@@ -17,8 +17,8 @@ defmodule Genom.WebServer do
                                {"/", :cowboy_static, {:priv_file, :genom, "index.html"}},
                                {"/[...]", :cowboy_static, {:priv_dir, :genom, "", [{:mimetypes, :cow_mimetypes, :all}]}}
                         ]} ])
-    	res = {:ok, _} = :cowboy.start_http(:http_test_listener, 5000, [port: @my_port], [env: [ dispatch: dispatch ] ])
-    	Logger.info "HTTP Server started at port #{@my_port}"
+    	res = {:ok, _} = :cowboy.start_http(:http_test_listener, 5000, [port: Genom.Tinca.get(:my_port)], [env: [ dispatch: dispatch ] ])
+    	Logger.info "HTTP Server started at port #{Genom.Tinca.get(:my_port)}"
     	res
   	end
 	def init(_type, req, []) do
