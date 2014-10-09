@@ -20,6 +20,8 @@ defmodule Genom.Mixfile do
                       :exactor,
                       :cowboy,
                       :extask,
+                      :jazz,
+                      :bullet,
 
                       :tinca,
                       :hashex
@@ -42,8 +44,10 @@ defmodule Genom.Mixfile do
       {:httpoison, github: "edgurgel/httpoison"},
       {:retry, github: "d0rc/retry"},
       {:exactor, github: "sasa1977/exactor"},
-      {:cowboy, github: "extend/cowboy", tag: "5ce4c2bfb40ecc4b687a2941e612025a1c4ff913"},
+      {:cowboy, github: "ninenines/cowboy", tag: "b57f94661f5fd186f55eb", override: true},
+      {:bullet, github: "extend/bullet", tag: "999f02f57c75edf7ddb5ed08b667ac6657418422"},
       {:extask, github: "timCF/extask"},
+      {:jazz, github: "meh/jazz"},
 
       {:tinca, github: "timCF/tinca"},
       {:exutils, github: "timCF/exutils"},

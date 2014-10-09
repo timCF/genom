@@ -41,6 +41,8 @@ defmodule Genom do
       |> store_my_info_to_hash
 
     children = [
+      worker(Genom.ModulesCacheWriter, []),
+      worker(Genom.Unit, [])
       # Define workers and child supervisors to be supervised
       # worker(Genom.Worker, [arg1, arg2, arg3])
     ]
@@ -64,7 +66,7 @@ defmodule Genom do
             |> make_hosts_map
                 |> Enum.map(&parse_host/1)
                     |> Tinca.put(:hosts)
-      _ ->  Logger.warn "Genom : hosts configuration file not found! Genom will not try to connect to other hosts, but will handle incoming connections."
+      _ ->  Logger.warn "Genom : hosts configuration file not found! Genom will not try to connect to other hosts now, but will handle incoming connections."
             Tinca.put([], :hosts)
     end
   end

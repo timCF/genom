@@ -22,7 +22,11 @@ defmodule Genom.External do
 	end
 end
 
+
 defmodule Genom.Bullet do
+
+	require Logger
+	@pong (%{subject: "pong", content: ""} |> Jazz.encode!)
 
 	defmodule WebProtocol do
 		@derive [HashUtils]
@@ -71,4 +75,12 @@ defmodule Genom.Bullet do
 	#############################################
 	### private handlers for mess from client ###
 	#############################################
+
+	defp handle_message_from_client(%WebProtocol{subject: "get_state"}) do
+		Genom.Tinca.get(:web_view_cache)
+	end
+	defp handle_message_from_client(%WebProtocol{subject: "ping"}) do
+		@pong
+	end
+
 end

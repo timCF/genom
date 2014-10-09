@@ -33,12 +33,30 @@ defmodule Genom.Unit do
 			@timeout
 		}
 	end
+	defcall add_hostinfo(host_info = %Genom.HostInfo{host: incoming_host}), state: state = %SlaveState{} do
+		Logger.error "Got mess #{inspect host_info} when state was slave"
+		{
+			:reply,
+			"Genom.Unit : now state is slave, I can't handle it ... ",
+			state,
+			@timeout
+		}
+	end
 	defcall add_slaveinfo(slave_info = %Genom.AppInfo{id: appid}), state: state = %MasterState{} do
 		{
 			:reply,
 			"ok",
 			( HashUtils.add(state, [:slaves_info, appid], slave_info)
 				|> main_master_handler ),
+			@timeout
+		}
+	end
+	defcall add_slaveinfo(slave_info = %Genom.AppInfo{id: appid}), state: state = %SlaveState{} do
+		Logger.error "Got mess #{inspect slave_info} when state was slave"
+		{
+			:reply,
+			"Genom.Unit : now state is slave, I can't handle it ... ",
+			state,
 			@timeout
 		}
 	end
@@ -72,9 +90,9 @@ defmodule Genom.Unit do
 			stamp: Exutils.makestamp }}
 	end
 	defp become_master %SlaveState{ my_info: my_info = %Genom.AppInfo{} } do
-		#
-		#	TODO : start web-server
-		#
+
+		Genom.WebServer.start
+		
 		%MasterState{ 
 			my_info: HashUtils.set(my_info, :role, :master),
 			slaves_info: %{},
@@ -152,8 +170,10 @@ defmodule Genom.Unit do
 
 
 	defp refresh_slaves(state = %MasterState{}) do
-		HashUtils.modify_all(state, :slaves_info, 
-			fn(appinfo = %Genom.AppInfo{stamp: stamp}) ->
+		HashUtils.modify_all(state, [:slaves_info], 
+			#fn(appinfo = %Genom.AppInfo{stamp: stamp}) ->
+			fn(appinfo) -> IO.inspect appinfo
+				stamp = appinfo.stamp
 				case (Exutils.makestamp - stamp) > @slave_death_timeout do
 					true -> HashUtils.set(appinfo, :status, :dead)
 					false -> appinfo
