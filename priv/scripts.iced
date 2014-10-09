@@ -25,5 +25,5 @@ controllers.my_controller = ($scope, $http, $interval, $sanitize) ->
 			mess = {"subject": "ping","content": "nil"}
 			$scope.bullet.send(JSON.stringify(mess))
 		# next , define functions for UI
-		#$interval( (->) , 500, [], [])
+		$interval( (->) , 500, [], [])
 web_interface.controller(controllers)

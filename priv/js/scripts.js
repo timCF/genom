@@ -37,7 +37,7 @@
           return $scope.state = mess.content;
         }
       };
-      return $scope.bullet.onheartbeat = function() {
+      $scope.bullet.onheartbeat = function() {
         var mess;
         mess = {
           "subject": "ping",
@@ -45,6 +45,7 @@
         };
         return $scope.bullet.send(JSON.stringify(mess));
       };
+      return $interval((function() {}), 500, [], []);
     };
   };
 

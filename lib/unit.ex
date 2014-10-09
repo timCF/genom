@@ -127,7 +127,7 @@ defmodule Genom.Unit do
 	defp main_slave_handler(old_state) do
 		state = refresh_self(old_state)
 		case report_to_master(state) do
-			:failed -> become_master(state)
+			:failed -> become_master(state) |> main_master_handler
 			:ok -> state
 		end
 	end
@@ -170,7 +170,7 @@ defmodule Genom.Unit do
 
 
 	defp refresh_slaves(state = %MasterState{}) do
-		HashUtils.modify_all(state, [:slaves_info], 
+		HashUtils.modify_all(state, :slaves_info, 
 			#fn(appinfo = %Genom.AppInfo{stamp: stamp}) ->
 			fn(appinfo) -> IO.inspect appinfo
 				stamp = appinfo.stamp
@@ -180,8 +180,8 @@ defmodule Genom.Unit do
 				end
 			end )
 	end
-	defp refresh_other_hosts(state = %MasterState{}) do
-		HashUtils.modify_all(state, :other_hosts, 
+	defp refresh_other_hosts(state = %Genom.Unit.MasterState{}) do
+		HashUtils.modify_all(state, [:other_hosts], 
 			fn(hostinfo = %Genom.HostInfo{host: host, port: port, stamp: stamp}) ->
 				case ((Exutils.makestamp - stamp) > @host_death_timeout) and (try_send_my_hostinfo(host, port, prepare_host_info(state)) != :ok ) do
 					true -> HashUtils.set(hostinfo, :status, :dead)
@@ -190,6 +190,7 @@ defmodule Genom.Unit do
 			end )
 	end
 	defp encode_and_put_to_cache state do
+		IO.puts "encode_and_put_to_cache"
 		%Genom.Bullet.WebProtocol{ subject: "refresh", content: Exutils.prepare_to_jsonify(state, %{tuple_values_to_lists: true}) }
 			|> Jazz.encode!
 				|> Genom.Tinca.put(:web_view_cache)
