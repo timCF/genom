@@ -21,22 +21,20 @@ defmodule Genom.Unit do
 		}
 	end
 
-	defcall add_hostinfo(host_info = %Genom.HostInfo{}), state: state = %MasterState{} do
+	defcast add_hostinfo(host_info = %Genom.HostInfo{}), state: state = %MasterState{} do
 		new_state = HashUtils.modify(state, [:other_hosts], 
 						fn(hosts_list) ->
 							merge_incoming_hostinfo(hosts_list, host_info)
 						end )
 		{
-			:reply,
-			"ok",
+			:noreply,
 			main_master_handler(new_state),
 			@timeout
 		}
 	end
-	defcall add_slaveinfo(slave_info = %Genom.AppInfo{id: appid}), state: state = %MasterState{} do
+	defcast add_slaveinfo(slave_info = %Genom.AppInfo{id: appid}), state: state = %MasterState{} do
 		{
-			:reply,
-			"ok",
+			:noreply,
 			( HashUtils.add(state, [:slaves_info, appid], slave_info)
 				|> main_master_handler ),
 			@timeout
@@ -205,7 +203,7 @@ defmodule Genom.Unit do
 				|> :base64.encode
 	end
 	defp try_send_my_hostinfo(host, port, my_hostinfo_bin) do
-		case Retry.run( %{sleep: 500, tries: 5}, try_send_my_hostinfo_process(host, port, my_hostinfo_bin)) do
+		case Retry.run( %{sleep: 500, tries: 5}, fn() -> try_send_my_hostinfo_process(host, port, my_hostinfo_bin) end ) do
 			{:ok, _} -> :ok
 			err -> 	Logger.warn "Genom.Unit : exchange with host #{host}:#{port} failed, code is #{inspect err}"
 		end

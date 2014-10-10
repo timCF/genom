@@ -1,0 +1,7 @@
+hosts:
+ - host: "192.168.59.3"
+   port: 8998
+   comment: "office centos VM"
+ - host: "192.168.59.103"
+   port: 8998
+   comment: "office MAC"

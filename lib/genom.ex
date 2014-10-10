@@ -63,7 +63,7 @@ defmodule Genom do
   defp store_hosts conf_filename do
     case File.read(conf_filename) do
       {:ok, _} ->
-        :yaml.load_file(conf_filename)
+        :yaml.load_file(conf_filename, [:implicit_atoms])
             |> make_hosts_map
                 |> Enum.map(&parse_host/1)
                     |> Tinca.put(:hosts)
@@ -85,7 +85,7 @@ defmodule Genom do
   defp get_conf_file_path(env) do
     (env[:app] |> Exutils.priv_dir)<>"/genom.yml"
   end
-  defp make_hosts_map({:ok, [%{"hosts" => hosts_raw_lst}]}) do
+  defp make_hosts_map({:ok, [%{hosts: hosts_raw_lst}]}) do
     check_hosts(hosts_raw_lst)
     |> Enum.map( 
       fn( host = %{host: hostname} ) ->
