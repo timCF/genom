@@ -65,6 +65,7 @@ defmodule Genom.Unit do
 	defp create_state do
 		%SlaveState{ my_info: %Genom.AppInfo{ 
 			id: Genom.Tinca.get(:my_id),
+			name: Genom.Tinca.get(:my_app),
 			role: :slave,
 			status: :alive,
 			modules_info: Genom.Tinca.get(:modules_info),

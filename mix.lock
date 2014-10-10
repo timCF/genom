@@ -1,6 +1,6 @@
 %{"bullet": {:git, "git://github.com/extend/bullet.git", "999f02f57c75edf7ddb5ed08b667ac6657418422", []},
-  "cowboy": {:git, "git://github.com/ninenines/cowboy.git", "b57f94661f5fd186f55eb0fead49849e0b1399d1", [tag: "b57f94661f5fd186f55eb"]},
-  "cowlib": {:git, "git://github.com/ninenines/cowlib.git", "d544a494af4dbc810fc9c15eaf5cc050cced1501", [ref: "1.0.0"]},
+  "cowboy": {:git, "git://github.com/ninenines/cowboy.git", "021f4f6069e5fae326bdfb0acb12c6500082fa44", [tag: "021f4f6069e5fae326bdfb0acb12c6500082fa44"]},
+  "cowlib": {:git, "git://github.com/extend/cowlib.git", "d544a494af4dbc810fc9c15eaf5cc050cced1501", [ref: "1.0.0"]},
   "exactor": {:git, "git://github.com/sasa1977/exactor.git", "0467f8100bc735405d597dbf94996195eb31e0b6", []},
   "extask": {:git, "git://github.com/timCF/extask.git", "4164dddf3135c44623d77e9cba07324595353d6b", []},
   "exutils": {:git, "git://github.com/timCF/exutils.git", "70f53fdc469972218edb612a35fbb00c1c4706b6", []},
@@ -9,7 +9,7 @@
   "httpoison": {:git, "git://github.com/edgurgel/httpoison.git", "200c269d11b7978158183defe37561e491fcc6fe", []},
   "idna": {:package, "1.0.1"},
   "jazz": {:git, "git://github.com/meh/jazz.git", "49f335492aca5516495199dd81dd18b845ebaa69", []},
-  "ranch": {:git, "git://github.com/ninenines/ranch.git", "adf1822defc2b7cfdc7aca112adabfa1d614043c", [ref: "1.0.0"]},
+  "ranch": {:git, "git://github.com/extend/ranch.git", "adf1822defc2b7cfdc7aca112adabfa1d614043c", [ref: "1.0.0"]},
   "retry": {:git, "git://github.com/d0rc/retry.git", "6f1f744fc4f002bc763383e0e872e5bf0dec6b3e", []},
   "tinca": {:git, "git://github.com/timCF/tinca.git", "0682148a9452052b52e5476273b551ec57dcde9c", []},
   "yamler": {:git, "git://github.com/goertzenator/yamler.git", "5084e38b7bf34fa74d1d064b3eec5cc185e6ca4b", [branch: "mapping_as_map"]}}

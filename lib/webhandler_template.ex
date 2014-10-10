@@ -6,9 +6,9 @@ defmodule Genom.WebhandlerTemplate do
 			### callbacks ###
 			#################
 
-			def init( req, opts) do
+			def init(_trans, req, opts) do
 				{
-					:http,
+					:ok,
 					req,
 					case :cowboy_req.has_body(req) do
 						true -> prev_parse(req, opts)
@@ -27,11 +27,8 @@ defmodule Genom.WebhandlerTemplate do
 
 			defp reply(ans, req, opts) when is_binary(ans) do
 				IO.puts "Genom.Server : send answer #{ans}"
-				{
-					:ok,
-					:cowboy_req.reply(200, [{"content-type", "text/plain"}], ans, req),
-					opts
-				}
+				{:ok, req_fin} = :cowboy_req.reply(200, [{"content-type", "text/plain"}], ans, req)
+				{:ok, req_fin, opts}
 			end
 
 			############

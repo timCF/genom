@@ -44,7 +44,7 @@ defmodule Genom.Mixfile do
       {:httpoison, github: "edgurgel/httpoison"},
       {:retry, github: "d0rc/retry"},
       {:exactor, github: "sasa1977/exactor"},
-      {:cowboy, github: "ninenines/cowboy", override: true, tag: "b57f94661f5fd186f55eb"},
+      {:cowboy, github: "ninenines/cowboy", override: true, tag: "021f4f6069e5fae326bdfb0acb12c6500082fa44"},
       {:bullet, github: "extend/bullet"},
       {:extask, github: "timCF/extask"},
       {:jazz, github: "meh/jazz"},

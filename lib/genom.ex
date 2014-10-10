@@ -24,7 +24,7 @@ defmodule Genom do
   # status = :alive | :dead
   defmodule AppInfo do
     @derive [HashUtils]
-    defstruct id: nil, role: :slave, status: :alive, modules_info: nil, port: nil, stamp: 0
+    defstruct id: nil, name: nil, role: :slave, status: :alive, modules_info: nil, port: nil, stamp: 0
   end
   defmodule HostInfo do
     @derive [HashUtils]
@@ -57,6 +57,7 @@ defmodule Genom do
   defp store_my_info_to_hash env do
     get_conf_file_path(env) |> store_hosts
     store_port(env)
+    store_appname(env)
     Exutils.makecharid |> Tinca.put(:my_id)
   end
   defp store_hosts conf_filename do
@@ -75,6 +76,9 @@ defmodule Genom do
       nil -> Tinca.put( @default_port, :my_port )
       some when (is_integer(some) and (some > 0)) -> Tinca.put( some, :my_port )
     end
+  end
+  defp store_appname(env) do
+    Tinca.put( env[:app], :my_app )
   end
 
 

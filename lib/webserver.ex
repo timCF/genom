@@ -21,10 +21,4 @@ defmodule Genom.WebServer do
     	Logger.info "HTTP Server started at port #{Genom.Tinca.get(:my_port)}"
     	res
   	end
-	def init(_type, req, []) do
-		{:ok, req, :undefined}
-	end
-	def terminate(_Reason, _Req, _State) do
-		:ok
-	end
 end
