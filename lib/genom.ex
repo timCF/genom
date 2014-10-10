@@ -7,7 +7,7 @@ defmodule Genom do
 
   defmodule Host do
     @derive [HashUtils]
-    defstruct host: nil, port: nil
+    defstruct host: nil, port: nil, comment: ""
   end
 
 
@@ -28,7 +28,7 @@ defmodule Genom do
   end
   defmodule HostInfo do
     @derive [HashUtils]
-    defstruct apps: %{}, host: nil, port: nil, stamp: 0, status: :dead
+    defstruct apps: %{}, host: nil, port: nil, stamp: 0, status: :dead, comment: ""
   end
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
@@ -81,12 +81,13 @@ defmodule Genom do
   defp get_conf_file_path(env) do
     (env[:app] |> Exutils.priv_dir)<>"/genom.yml"
   end
-  defp make_hosts_map({:ok, [%{"hosts" => hosts_raw}]}) do
-    Enum.map(hosts_raw, 
+  defp make_hosts_map({:ok, [%{"hosts" => hosts_raw_lst}]}) do
+    check_hosts(hosts_raw_lst)
+    |> Enum.map( 
       fn( host = %{host: hostname} ) ->
         case HashUtils.get(host, :port) do
-          nil -> %Host{host: hostname, port: @default_port}
-          some -> %Host{host: hostname, port: some}
+          nil -> %Host{host: hostname, port: @default_port, comment: HashUtils.get(host, :comment) |> to_string}
+          some -> %Host{host: hostname, port: some, comment: HashUtils.get(host, :comment) |> to_string}
         end
       end )
   end
@@ -95,6 +96,23 @@ defmodule Genom do
     %Host{port: port, host:
       Enum.map([q,w,e,r], &(to_string(&1)))
         |> Enum.join(".")}
+  end
+
+  defp check_hosts(hosts_raw_lst) do
+    Enum.map(hosts_raw_lst, 
+      fn(host) ->
+        case Enum.filter(hosts_raw_lst,
+          fn(host_inner) -> 
+            HashUtils.get(host_inner, :port) == HashUtils.get(host, :port)
+            and
+            HashUtils.get(host_inner, :host) == HashUtils.get(host, :host)
+          end) do
+
+          [^host] -> host
+          some_hosts -> raise "Genom : wrong config file! Host #{inspect host} is similar to #{inspect some_hosts}"
+
+        end
+      end )
   end
 
 

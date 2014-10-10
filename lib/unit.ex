@@ -21,24 +21,15 @@ defmodule Genom.Unit do
 		}
 	end
 
-	defcall add_hostinfo(host_info = %Genom.HostInfo{host: incoming_host}), state: state = %MasterState{} do
+	defcall add_hostinfo(host_info = %Genom.HostInfo{}), state: state = %MasterState{} do
 		new_state = HashUtils.modify(state, [:other_hosts], 
 						fn(hosts_list) ->
-							[host_info|Enum.filter(hosts_list,fn(%Genom.HostInfo{host: this_host}) -> this_host != incoming_host end)]
+							merge_incoming_hostinfo(hosts_list, host_info)
 						end )
 		{
 			:reply,
 			"ok",
 			main_master_handler(new_state),
-			@timeout
-		}
-	end
-	defcall add_hostinfo(host_info = %Genom.HostInfo{host: incoming_host}), state: state = %SlaveState{} do
-		Logger.error "Got mess #{inspect host_info} when state was slave"
-		{
-			:reply,
-			"Genom.Unit : now state is slave, I can't handle it ... ",
-			state,
 			@timeout
 		}
 	end
@@ -48,15 +39,6 @@ defmodule Genom.Unit do
 			"ok",
 			( HashUtils.add(state, [:slaves_info, appid], slave_info)
 				|> main_master_handler ),
-			@timeout
-		}
-	end
-	defcall add_slaveinfo(slave_info = %Genom.AppInfo{id: appid}), state: state = %SlaveState{} do
-		Logger.error "Got mess #{inspect slave_info} when state was slave"
-		{
-			:reply,
-			"Genom.Unit : now state is slave, I can't handle it ... ",
-			state,
 			@timeout
 		}
 	end
@@ -99,8 +81,8 @@ defmodule Genom.Unit do
 			other_hosts: Genom.Tinca.get(:hosts) 
 							|> Enum.map(&create_host_struct/1) }
 	end
-	defp create_host_struct %Genom.Host{host: host, port: port} do
-		%Genom.HostInfo{apps: %{}, host: host, port: port, stamp: 0, status: :dead }
+	defp create_host_struct %Genom.Host{host: host, port: port, comment: comment} do
+		%Genom.HostInfo{apps: %{}, host: host, port: port, stamp: 0, status: :dead, comment: comment }
 	end
 
 	##########################
@@ -202,6 +184,14 @@ defmodule Genom.Unit do
 						|> Enum.each( fn(viewer) -> send(viewer, "refresh") end )
 					end
 		state
+	end
+	defp merge_incoming_hostinfo(hosts_list, hostinfo = %Genom.HostInfo{host: host, port: port}) do
+		case Enum.filter(hosts_list,
+				fn( %Genom.HostInfo{host: inner_host, port: inner_port} ) -> 
+					(inner_host == host) and (inner_port == port) end) do
+			[] -> [hostinfo|hosts_list]
+			[existing = %Genom.HostInfo{comment: comment}] -> (hosts_list--[existing])++[HashUtils.set(hostinfo, :comment, comment)]
+		end
 	end
 
 	###############################################

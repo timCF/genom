@@ -29,7 +29,3 @@ or queries contain some info about states etc
 
 gen_server(host leader) sends to other hosts list of info about itself and other apps in this host
 if can's connect to host leader - became host leader itself
-
-#
-# EXPOKER - TODO fix generating of next expected card in copies of apps when reading up-to-date state
-#
