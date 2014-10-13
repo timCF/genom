@@ -6,38 +6,38 @@ defmodule Genom.Unit do
 
 	defmodule MasterState do
 		@derive [HashUtils]
-		defstruct my_info: %Genom.AppInfo{}, slaves_info: %{}, other_hosts: []
+		defstruct my_info: %Genom.AppInfo{}, slaves_info: %{}, other_hosts: [], stamp: 0
 	end
 	defmodule SlaveState do
 		@derive [HashUtils]
-		defstruct my_info: %Genom.AppInfo{}
+		defstruct my_info: %Genom.AppInfo{}, stamp: 0
 	end
 
 	definit do
 		{
 			:ok, 
-			( create_state |> main_slave_handler ),
+			( create_state
+				|> main_slave_handler
+					|> update_stamp  ),
 			@timeout
 		}
 	end
 
-	defcast add_hostinfo(host_info = %Genom.HostInfo{}), state: state = %MasterState{} do
-		new_state = HashUtils.modify(state, [:other_hosts], 
+	defcast add_hostinfo(host_info = %Genom.HostInfo{}), state: state = %MasterState{stamp: mystamp} do
+		{
+			:noreply,
+			HashUtils.modify(state, [:other_hosts], 
 						fn(hosts_list) ->
 							merge_incoming_hostinfo(hosts_list, host_info)
-						end )
-		{
-			:noreply,
-			main_master_handler(new_state),
-			@timeout
+						end ),
+			calculate_timeout(mystamp)
 		}
 	end
-	defcast add_slaveinfo(slave_info = %Genom.AppInfo{id: appid}), state: state = %MasterState{} do
+	defcast add_slaveinfo(slave_info = %Genom.AppInfo{id: appid}), state: state = %MasterState{stamp: mystamp} do
 		{
 			:noreply,
-			( HashUtils.add(state, [:slaves_info, appid], slave_info)
-				|> main_master_handler ),
-			@timeout
+			HashUtils.add(state, [:slaves_info, appid], slave_info),
+			calculate_timeout(mystamp)
 		}
 	end
 
@@ -48,10 +48,10 @@ defmodule Genom.Unit do
 			@timeout
 		}
 	end
-	definfo :timeout, state: state = %MasterState{} do
+	definfo :timeout, state: state = %MasterState{stamp: mystamp} do
 		{
 			:noreply,
-			main_master_handler(state),
+			( main_master_handler(state) |> update_stamp ),
 			@timeout
 		}
 	end
@@ -98,6 +98,23 @@ defmodule Genom.Unit do
 	defp refresh_timestamp(state) do
 		HashUtils.set(state, [:my_info, :stamp],
 			Exutils.makestamp)
+	end
+
+	#######################
+	### else priv funcs ###
+	#######################
+
+
+	defp update_stamp(state) do
+		HashUtils.set( state, :stamp, Exutils.makestamp )
+	end
+
+	defp calculate_timeout(stamp) when is_integer(stamp) do
+		case (stamp + @timeout) - Exutils.makestamp do
+			some when (some > 0) -> some
+			some_else -> 	send(self, :timeout)
+							0
+		end
 	end
 
 	########################
