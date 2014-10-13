@@ -95,9 +95,9 @@ defmodule Genom do
         end
       end )
   end
-  defp parse_host(%Host{host: host, port: port}) when (is_binary(host) and is_integer(port) and (port > 0)) do
+  defp parse_host(%Host{host: host, port: port, comment: comment}) when (is_binary(host) and is_integer(port) and (port > 0)) do
     {:ok, {q,w,e,r}} = host |> String.to_char_list |> :inet.parse_ipv4_address
-    %Host{port: port, host:
+    %Host{port: port, comment: comment, host:
       Enum.map([q,w,e,r], &(to_string(&1)))
         |> Enum.join(".")}
   end
