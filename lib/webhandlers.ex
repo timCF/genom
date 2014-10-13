@@ -13,7 +13,8 @@ end
 defmodule Genom.External do
 	use Genom.WebhandlerTemplate
 	def handle(req, {:ok, host_info = %Genom.HostInfo{}, opts}) do
-		Genom.Unit.add_hostinfo(host_info)
+		HashUtils.set(host_info, :host, :cowboy_req.host(req) |> elem(0) )
+			|> Genom.Unit.add_hostinfo
 		reply("ok",req, opts)
 	end
 	def handle(req, {:ok, some_term, opts}) do
