@@ -24,7 +24,7 @@ defmodule Genom do
   # status = :alive | :dead
   defmodule AppInfo do
     @derive [HashUtils]
-    defstruct id: nil, name: nil, role: :slave, status: :alive, modules_info: nil, port: nil, stamp: 0
+    defstruct id: nil, name: nil, role: :slave, status: :alive, modules_info: nil, port: nil, stamp: 0, comment: ""
   end
   defmodule HostInfo do
     @derive [HashUtils]
