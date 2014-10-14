@@ -68,7 +68,8 @@ defmodule Genom.Unit do
 			status: :alive,
 			modules_info: Genom.Tinca.get(:modules_info),
 			port: Genom.Tinca.get(:my_port),
-			stamp: Exutils.makestamp }}
+			stamp: Exutils.makestamp,
+			comment: Genom.Tinca.get(:my_comment) }}
 	end
 	defp become_master %SlaveState{ my_info: my_info = %Genom.AppInfo{} } do
 
