@@ -14,7 +14,7 @@ defmodule Genom do
 
   defmacro add_info(value, key) do
     quote do
-      Genom.ModulesCacheWriter.add_info(__MODULE__, unquote(key), { Exutils.makestamp, unquote(value) } )
+      Genom.ModulesCacheWriter.add_info(__MODULE__, unquote(key), %{stamp: Exutils.make_verbose_datetime, value: unquote(value)} )
     end
   end
 

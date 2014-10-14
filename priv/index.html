@@ -43,28 +43,55 @@
       </div>
       <!-- apps list header -->
       <div class="row-fluid">
-        <div class="span1">APP_NAME</div>
-        <div class="span1">ROLE</div>
-        <div class="span1">STATUS</div>
-        <div class="span1">STAMP</div>
-        <div class="span8">MODULES_INFO</div>
+        <div class="span2">APP_NAME</div>
+        <div class="span2">ROLE</div>
+        <div class="span2">STATUS</div>
+        <div class="span2">STAMP</div>
+        <div class="span2"> MODULE </div>
+        <div class="span2"> INFO </div>
       </div>
       <!-- master app -->
       <div class="row-fluid" ng-style="generate_app_style(state.my_info.status)">
-        <div class="span1">{{state.my_info.name}}</div>
-        <div class="span1">{{state.my_info.role}}</div>
-        <div class="span1">{{state.my_info.status}}</div>
-        <div class="span1">{{state.my_info.stamp}}</div>
-        <div class="span8">{{state.my_info.modules_info}}</div>
+        <div class="span2">{{state.my_info.name}}</div>
+        <div class="span2">{{state.my_info.role}}</div>
+        <div class="span2">{{state.my_info.status}}</div>
+        <div class="span2">{{state.my_info.stamp}}</div>
+        <div class="span4">
+          <div ng-repeat="(module, moduleinfo) in state.my_info.modules_info">
+            <div class="row-fluid">
+              <div class="span6"> {{module}} </div>
+              <div class="span6">
+                <div ng-repeat="(key, val) in moduleinfo">
+                  key : {{key}}<br>
+                  date : {{val.stamp}}<br>
+                  value : {{val.value}}<br><br>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <!-- slaves -->
       <div ng-repeat=" (id, appinfo) in state.slaves_info"  style="display:inline">
         <div class="row-fluid" ng-style="generate_app_style(appinfo.status)">
-          <div class="span1">{{appinfo.name}}</div>
-          <div class="span1">{{appinfo.role}}</div>
-          <div class="span1">{{appinfo.status}}</div>
-          <div class="span1">{{appinfo.stamp}}</div>
-          <div class="span8">{{appinfo.modules_info}}</div>
+          <div class="span2">{{appinfo.name}}</div>
+          <div class="span2">{{appinfo.role}}</div>
+          <div class="span2">{{appinfo.status}}</div>
+          <div class="span2">{{appinfo.stamp}}</div>
+          <div class="span4">
+            <div ng-repeat="(module, moduleinfo) in appinfo.modules_info">
+              <div class="row-fluid">
+                <div class="span6"> {{module}} </div>
+                <div class="span6">
+                  <div ng-repeat="(key, val) in moduleinfo">
+                    key : {{key}}<br>
+                    date : {{val.stamp}}<br>
+                    value : {{val.value}}<br><br>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <hr>
@@ -104,20 +131,34 @@
         </div>
         <!-- apps list header -->
         <div class="row-fluid">
-          <div class="span1">APP_NAME</div>
-          <div class="span1">ROLE</div>
-          <div class="span1">STATUS</div>
-          <div class="span1">STAMP</div>
-          <div class="span8">MODULES_INFO</div>
+          <div class="span2">APP_NAME</div>
+          <div class="span2">ROLE</div>
+          <div class="span2">STATUS</div>
+          <div class="span2">STAMP</div>
+          <div class="span2"> MODULE </div>
+          <div class="span2"> INFO </div>
         </div>
         <!-- this host apps -->
         <div ng-repeat=" (id, appinfo) in host.apps"  style="display:inline">
           <div class="row-fluid" ng-style="generate_app_style(appinfo.status)">
-            <div class="span1">{{appinfo.name}}</div>
-            <div class="span1">{{appinfo.role}}</div>
-            <div class="span1">{{appinfo.status}}</div>
-            <div class="span1">{{appinfo.stamp}}</div>
-            <div class="span8">{{appinfo.modules_info}}</div>
+            <div class="span2">{{appinfo.name}}</div>
+            <div class="span2">{{appinfo.role}}</div>
+            <div class="span2">{{appinfo.status}}</div>
+            <div class="span2">{{appinfo.stamp}}</div>
+            <div class="span4">
+              <div ng-repeat="(module, moduleinfo) in appinfo.modules_info">
+                <div class="row-fluid">
+                  <div class="span6"> {{module}} </div>
+                  <div class="span6">
+                    <div ng-repeat="(key, val) in moduleinfo">
+                      key : {{key}}<br>
+                      date : {{val.stamp}}<br>
+                      value : {{val.value}}<br><br>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <hr>
