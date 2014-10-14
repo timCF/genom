@@ -14,16 +14,19 @@ defmodule Genom.External do
 	require Logger
 	use Genom.WebhandlerTemplate
 	def handle(req, {:ok, host_info = %Genom.HostInfo{}, opts}) do
-		Logger.info "req = #{inspect req}"
-		Logger.warn "got mess from another host #{inspect (:cowboy_req.host(req) |> elem(0))} #{inspect host_info}"
-		HashUtils.set(host_info, :host, :cowboy_req.host(req) |> elem(0) )
+		Logger.warn "got mess from another host #{get_host(req)} \n #{inspect host_info}"
+		HashUtils.set(host_info, :host, get_host(req))
 			|> Genom.Unit.add_hostinfo
 		reply("ok",req, opts)
 	end
 	def handle(req, {:ok, some_term, opts}) do
-		Logger.error "got WRONG mess from another host #{inspect (:cowboy_req.host(req) |> elem(0))} #{inspect some_term}"
+		Logger.error "got WRONG mess from another host #{get_host(req)} #{inspect some_term}"
 		"Genom.External : error, expect term %Genom.HostInfo{}, but got #{inspect some_term}"
 			|> reply(req, opts)
+	end
+	defp get_host(req) do
+		{q,w,e,r} = req |> elem(7) |> elem(0)
+		"#{q}.#{w}.#{e}.#{r}"
 	end
 end
 
