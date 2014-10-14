@@ -238,6 +238,7 @@ defmodule Genom.Unit do
 		case Retry.run( %{sleep: 500, tries: 5}, fn() -> try_send_my_hostinfo_process(host, port, my_hostinfo_bin) end ) do
 			{:ok, _} -> :ok
 			err -> 	Logger.warn "Genom.Unit : exchange with host #{host}:#{port} failed, code is #{inspect err}"
+					:failed
 		end
 	end
 	defp try_send_my_hostinfo_process(host, port, my_hostinfo_bin) do
