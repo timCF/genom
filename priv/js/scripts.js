@@ -7,7 +7,38 @@
   controllers = {};
 
   controllers.my_controller = function($scope, $http, $interval, $sanitize) {
+    $scope.init_const = function() {
+      $scope["const"] = {};
+      $scope["const"].colors = {};
+      $scope["const"].colors.host_alive = '#66FFCC';
+      $scope["const"].colors.host_dead = '#FFCCCC';
+      $scope["const"].colors.app_alive = '#33FF00';
+      return $scope["const"].colors.app_dead = '#FF0000';
+    };
+    $scope.generate_host_style = function(status) {
+      if (status === "alive") {
+        return {
+          'background-color': $scope["const"].colors.host_alive
+        };
+      } else {
+        return {
+          'background-color': $scope["const"].colors.host_dead
+        };
+      }
+    };
+    $scope.generate_app_style = function(status) {
+      if (status === "alive") {
+        return {
+          'background-color': $scope["const"].colors.app_alive
+        };
+      } else {
+        return {
+          'background-color': $scope["const"].colors.app_dead
+        };
+      }
+    };
     return $scope.init = function() {
+      $scope.init_const();
       $scope.bullet = $.bullet("ws://" + location.host + "/bullet");
       $scope.bullet.onopen = function() {
         var mess;

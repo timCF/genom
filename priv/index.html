@@ -16,67 +16,8 @@
   <body ng-controller="my_controller" ng-init="init()">
 
     <!-- LOCALHOST -->
-
+    <div ng-style="generate_host_style(state.my_info.status)">
     <!-- header -->
-    <div class="row-fluid">
-      <div class="span1">
-        HOST<br>
-        PORT<br>
-        STAMP<br>
-        STATUS<br>
-        COMMENT<br><br>
-      </div>
-      <div class="span1">
-        :<br>
-        :<br>
-        :<br>
-        :<br>
-        :<br><br>
-      </div>
-      <div class="span1">
-        localhost<br>
-        {{state.my_info.port}}<br>
-        {{state.my_info.stamp}}<br>
-        {{state.my_info.status}}<br>
-        {{state.my_info.comment}}<br><br>
-      </div>
-    </div>
-    <!-- apps list header -->
-    <div class="row-fluid">
-      <div class="span1">APP_NAME</div>
-      <div class="span1">ROLE</div>
-      <div class="span1">STATUS</div>
-      <div class="span1">STAMP</div>
-      <div class="span8">MODULES_INFO</div>
-    </div>
-    <!-- master app -->
-    <div class="row-fluid">
-      <div class="span1">{{state.my_info.name}}</div>
-      <div class="span1">{{state.my_info.role}}</div>
-      <div class="span1">{{state.my_info.status}}</div>
-      <div class="span1">{{state.my_info.stamp}}</div>
-      <div class="span8">{{state.my_info.modules_info}}</div>
-    </div>
-    <!-- slaves -->
-    <div ng-repeat=" (id, appinfo) in state.slaves_info"  style="display:inline">
-      <div class="row-fluid">
-        <div class="span1">{{appinfo.name}}</div>
-        <div class="span1">{{appinfo.role}}</div>
-        <div class="span1">{{appinfo.status}}</div>
-        <div class="span1">{{appinfo.stamp}}</div>
-        <div class="span8">{{appinfo.modules_info}}</div>
-      </div>
-    </div>
-    <hr>
-
-
-
-    <!-- OTHER HOSTS HERE -->
-
-
-
-    <div ng-repeat="host in state.other_hosts">
-      <!-- header -->
       <div class="row-fluid">
         <div class="span1">
           HOST<br>
@@ -93,11 +34,11 @@
           :<br><br>
         </div>
         <div class="span1">
-          {{host.host}}<br>
-          {{host.port}}<br>
-          {{host.stamp}}<br>
-          {{host.status}}<br>
-          {{host.comment}}<br><br>
+          localhost<br>
+          {{state.my_info.port}}<br>
+          {{state.my_info.stamp}}<br>
+          {{state.my_info.status}}<br>
+          {{state.my_info.comment}}<br><br>
         </div>
       </div>
       <!-- apps list header -->
@@ -108,9 +49,17 @@
         <div class="span1">STAMP</div>
         <div class="span8">MODULES_INFO</div>
       </div>
-      <!-- this host apps -->
-      <div ng-repeat=" (id, appinfo) in host.apps"  style="display:inline">
-        <div class="row-fluid">
+      <!-- master app -->
+      <div class="row-fluid" ng-style="generate_app_style(state.my_info.status)">
+        <div class="span1">{{state.my_info.name}}</div>
+        <div class="span1">{{state.my_info.role}}</div>
+        <div class="span1">{{state.my_info.status}}</div>
+        <div class="span1">{{state.my_info.stamp}}</div>
+        <div class="span8">{{state.my_info.modules_info}}</div>
+      </div>
+      <!-- slaves -->
+      <div ng-repeat=" (id, appinfo) in state.slaves_info"  style="display:inline">
+        <div class="row-fluid" ng-style="generate_app_style(appinfo.status)">
           <div class="span1">{{appinfo.name}}</div>
           <div class="span1">{{appinfo.role}}</div>
           <div class="span1">{{appinfo.status}}</div>
@@ -119,6 +68,60 @@
         </div>
       </div>
       <hr>
+    </div>
+
+
+
+    <!-- OTHER HOSTS HERE -->
+
+
+
+    <div ng-repeat="host in state.other_hosts">
+      <div ng-style="generate_host_style(host.status)">
+        <!-- header -->
+        <div class="row-fluid">
+          <div class="span1">
+            HOST<br>
+            PORT<br>
+            STAMP<br>
+            STATUS<br>
+            COMMENT<br><br>
+          </div>
+          <div class="span1">
+            :<br>
+            :<br>
+            :<br>
+            :<br>
+            :<br><br>
+          </div>
+          <div class="span1">
+            {{host.host}}<br>
+            {{host.port}}<br>
+            {{host.stamp}}<br>
+            {{host.status}}<br>
+            {{host.comment}}<br><br>
+          </div>
+        </div>
+        <!-- apps list header -->
+        <div class="row-fluid">
+          <div class="span1">APP_NAME</div>
+          <div class="span1">ROLE</div>
+          <div class="span1">STATUS</div>
+          <div class="span1">STAMP</div>
+          <div class="span8">MODULES_INFO</div>
+        </div>
+        <!-- this host apps -->
+        <div ng-repeat=" (id, appinfo) in host.apps"  style="display:inline">
+          <div class="row-fluid" ng-style="generate_app_style(appinfo.status)">
+            <div class="span1">{{appinfo.name}}</div>
+            <div class="span1">{{appinfo.role}}</div>
+            <div class="span1">{{appinfo.status}}</div>
+            <div class="span1">{{appinfo.stamp}}</div>
+            <div class="span8">{{appinfo.modules_info}}</div>
+          </div>
+        </div>
+        <hr>
+      </div>
     </div>
 
 
