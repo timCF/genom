@@ -1,10 +1,4 @@
 hosts:
- - host: "127.0.0.1"
-   port: 8998
-   comment: "some else loclhost )))"
- - host: "192.168.59.3"
-   port: 8998
-   comment: "office MAC"
  - host: "192.168.59.103"
    port: 8998
    comment: "centos VM"
