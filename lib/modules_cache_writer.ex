@@ -12,7 +12,9 @@ defmodule Genom.ModulesCacheWriter do
 		{
 			:reply,
 			val,
-			HashUtils.addf(state, [module, key], value) |> Genom.Tinca.put(:modules_info)
+			HashUtils.addf(state, [module, key],
+				Exutils.prepare_to_jsonify(value, %{tuple_values_to_lists: true}))
+					|> Genom.Tinca.put(:modules_info)
 		}
 	end
 
