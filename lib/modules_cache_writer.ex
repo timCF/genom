@@ -8,10 +8,10 @@ defmodule Genom.ModulesCacheWriter do
 			state when is_map(state) -> {:ok, state}
 		end
 	end
-	defcall add_info(module, key, value), state: state do
+	defcall add_info(module, key, value = %{value: val}), state: state do
 		{
 			:reply,
-			value,
+			val,
 			HashUtils.addf(state, [module, key], value) |> Genom.Tinca.put(:modules_info)
 		}
 	end

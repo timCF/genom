@@ -51,7 +51,7 @@ defmodule Genom.Unit do
 			@timeout
 		}
 	end
-	definfo :timeout, state: state = %MasterState{stamp: mystamp} do
+	definfo :timeout, state: state = %MasterState{} do
 		{
 			:noreply,
 			( main_master_handler(state) |> update_stamp ),
@@ -116,7 +116,7 @@ defmodule Genom.Unit do
 	defp calculate_timeout(stamp) when is_integer(stamp) do
 		case (stamp + @timeout) - Exutils.makestamp do
 			some when (some > 0) -> some
-			some_else -> 	send(self, :timeout)
+			_ -> 	send(self, :timeout)
 							0
 		end
 	end
