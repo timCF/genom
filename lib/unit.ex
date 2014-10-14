@@ -185,9 +185,9 @@ defmodule Genom.Unit do
 	defp refresh_other_hosts(state = %Genom.Unit.MasterState{}) do
 		HashUtils.modify_all(state, [:other_hosts], 
 			fn(hostinfo = %Genom.HostInfo{host: host, port: port, stamp: stamp}) ->
-				case ((Exutils.makestamp - stamp) > @host_death_timeout) and (try_send_my_hostinfo(host, port, prepare_host_info(state)) != :ok ) do
-					true -> HashUtils.set(hostinfo, :status, :dead)
-					false -> hostinfo
+				case ((Exutils.makestamp - stamp) < @host_death_timeout) or (try_send_my_hostinfo(host, port, prepare_host_info(state)) == :ok ) do
+					true -> hostinfo
+					false -> HashUtils.set(hostinfo, :status, :dead)
 				end
 				|> HashUtils.modify_all([:apps],
 					fn(appinfo = %Genom.AppInfo{stamp: stamp}) ->  
