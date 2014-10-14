@@ -1,31 +1,31 @@
 Genom
 =====
 
-** TODO: Add description **
+Is lightweight otp - application which help you to see states of your other otp-applications in network.
 
-otp - sup
+Just add genom to your app list, configure config.exs file like this :
 
-otp - app, supervise of supervisors)
+```
+config :genom, app: :my_otp_app, port: 8998, comment: "my otp application"
+```
+(note: this port must be opened!)
 
-in config.exs add address of git where is config-to-use)) Clone / update it in init of app
+If you want to send info about state of your application to other hosts, add genom.yml to priv dir of application.  This file must contain something like this:
 
-config:
-ip_addreses / ports of other supervisors
-some info about this supervisor / program
+```
+hosts:
+ - host: "192.168.59.103"
+   port: 8998
+   comment: "office centos VM"
+ - host: "192.168.59.3"
+   port: 8998
+   comment: "office MAC"
+```
 
-internal_port(cowboy) <----> supervisors_in_this_host(..)
-|
-|
-|
-gen_server1() --> cache() <---> view(), view on cowboy + bullet + angular + bootstrap. etc
-|
-|
-|
-external_port(cowboy) <---> supervisors_in_other_hosts(...)
+If you want add some special values to state for observing in the web, you can write somethere in your application
 
+```
+Genom.add_info("Some info about my state", :some_key)
+```
 
-on some timeout after last connection do ping-pong query
-or queries contain some info about states etc
-
-gen_server(host leader) sends to other hosts list of info about itself and other apps in this host
-if can's connect to host leader - became host leader itself
+And now observe info about your hosts / applications / modules in localhost:8998
