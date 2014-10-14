@@ -206,7 +206,11 @@ defmodule Genom.Unit do
 				fn( %Genom.HostInfo{host: inner_host, port: inner_port} ) -> 
 					(inner_host == host) and (inner_port == port) end) do
 			[] -> [hostinfo|hosts_list]
-			[existing = %Genom.HostInfo{comment: comment}] -> (hosts_list--[existing])++[HashUtils.set(hostinfo, :comment, comment)]
+			[existing = %Genom.HostInfo{comment: comment}] -> 
+				case comment == "" do
+					false -> (hosts_list--[existing])++[HashUtils.set(hostinfo, :comment, comment)]
+					true ->  (hosts_list--[existing])++[hostinfo]
+				end
 		end
 	end
 
@@ -215,7 +219,7 @@ defmodule Genom.Unit do
 	###############################################
 
 	defp prepare_host_info( %MasterState{my_info: my_info = %Genom.AppInfo{id: id, port: port}, slaves_info: slaves_info} ) do
-		%Genom.HostInfo{apps: HashUtils.add(slaves_info, id, my_info), port: port, stamp: Exutils.makestamp, status: :alive}
+		%Genom.HostInfo{apps: HashUtils.add(slaves_info, id, my_info), port: port, stamp: Exutils.makestamp, status: :alive, comment: Genom.Tinca.get(:my_comment)}
 			|> :erlang.term_to_binary
 				|> :base64.encode
 	end

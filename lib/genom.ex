@@ -58,6 +58,7 @@ defmodule Genom do
     get_conf_file_path(env) |> store_hosts
     store_port(env)
     store_appname(env)
+    store_comment(env)
     Exutils.makecharid |> Tinca.put(:my_id)
   end
   defp store_hosts conf_filename do
@@ -78,9 +79,17 @@ defmodule Genom do
     end
   end
   defp store_appname(env) do
-    Tinca.put( env[:app], :my_app )
+    case env[:app] do
+      nil -> Tinca.put( :undefined, :my_app )
+      some when is_atom(some) -> Tinca.put(some, :my_app)
+    end
   end
-
+  defp store_comment(env) do
+    case env[:comment] do
+      nil -> Tinca.put( "", :my_comment )
+      some when is_binary(some) -> Tinca.put(some, :my_comment)
+    end
+  end
 
   defp get_conf_file_path(env) do
     (env[:app] |> Exutils.priv_dir)<>"/genom.yml"
