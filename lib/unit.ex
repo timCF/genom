@@ -173,27 +173,27 @@ defmodule Genom.Unit do
 
 	defp refresh_slaves(state = %MasterState{}) do
 		HashUtils.modify_all(state, :slaves_info, 
-			#fn(appinfo = %Genom.AppInfo{stamp: stamp}) ->
 			fn(appinfo) -> IO.inspect appinfo
 				stamp = appinfo.stamp
 				case (Exutils.makestamp - stamp) > @slave_death_timeout do
 					true -> HashUtils.set(appinfo, :status, :dead)
-					false -> appinfo
+					false -> HashUtils.set(appinfo, :status, :alive)
 				end
 			end )
 	end
 	defp refresh_other_hosts(state = %Genom.Unit.MasterState{}) do
 		HashUtils.modify_all(state, [:other_hosts], 
 			fn(hostinfo = %Genom.HostInfo{host: host, port: port, stamp: stamp}) ->
-				case ((Exutils.makestamp - stamp) < @host_death_timeout) or (try_send_my_hostinfo(host, port, prepare_host_info(state)) == :ok ) do
-					true -> hostinfo
+				send_res = try_send_my_hostinfo(host, port, prepare_host_info(state))
+				case (( send_res == :ok ) or ((Exutils.makestamp - stamp) < @host_death_timeout)) do
+					true -> HashUtils.set(hostinfo, :status, :alive)
 					false -> HashUtils.set(hostinfo, :status, :dead)
 				end
 				|> HashUtils.modify_all([:apps],
 					fn(appinfo = %Genom.AppInfo{stamp: stamp}) ->  
 						case ((Exutils.makestamp - stamp) > @slave_death_timeout) do
 							true -> HashUtils.set(appinfo, :status, :dead)
-							false -> appinfo
+							false -> HashUtils.set(appinfo, :status, :alive)
 						end
 					end )
 			end )
