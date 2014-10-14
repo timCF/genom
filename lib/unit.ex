@@ -186,6 +186,13 @@ defmodule Genom.Unit do
 					true -> HashUtils.set(hostinfo, :status, :dead)
 					false -> hostinfo
 				end
+				|> HashUtils.modify_all([:apps],
+					fn(appinfo = %Genom.AppInfo{stamp: stamp}) ->  
+						case ((Exutils.makestamp - stamp) > @slave_death_timeout) do
+							true -> HashUtils.set(appinfo, :status, :dead)
+							false -> appinfo
+						end
+					end )
 			end )
 	end
 	defp encode_and_put_to_cache state do
