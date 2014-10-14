@@ -14,7 +14,7 @@ defmodule Genom do
 
   defmacro add_info(value, key) do
     quote do
-      Genom.ModulesCacheWriter.add_info(__MODULE__, unquote(key), %{stamp: Exutils.make_verbose_datetime, value: unquote(value)} )
+      Genom.ModulesCacheWriter.add_info(__MODULE__, unquote(key), %{stamp: Exutils.make_verbose_datetime, value: unquote(value)} |> Exutils.prepare_to_jsonify(%{tuple_values_to_lists: true}) )
     end
   end
 
