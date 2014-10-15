@@ -15,8 +15,6 @@ defmodule Genom.Unit do
 	end
 
 	definit do
-		Genom.add_info("Genom Unit init!", :init)
-		Genom.add_info("Genom some info!", :some_key)
 		{
 			:ok, 
 			( create_state
