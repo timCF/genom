@@ -15,6 +15,8 @@ defmodule Genom.Unit do
 	end
 
 	definit do
+		Genom.add_info("some", :new)
+		Genom.add_info("else", :newnew)
 		{
 			:ok, 
 			( create_state
