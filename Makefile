@@ -1,13 +1,8 @@
 all:
-		mix compile
-clean:     
+		git pull
 		mix clean
 		mix deps.clean --all
 		mix deps.get
-reload: clean all
-hard_reload: 
-		rm -rf ./mix.lock
-		mix clean
-		mix deps.clean --all
-		mix deps.get
-		mix compile
+		docker build --rm -t pfya/genom .
+push:
+		docker push pfya/genom
