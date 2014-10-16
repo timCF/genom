@@ -22,6 +22,7 @@ defmodule Genom.Mixfile do
                       :extask,
                       :jazz,
                       :bullet,
+                      :idna,
 
                       :tinca,
                       :hashex
@@ -51,7 +52,8 @@ defmodule Genom.Mixfile do
 
       {:tinca, github: "timCF/tinca"},
       {:exutils, github: "timCF/exutils"},
-      {:hashex, github: "timCF/hashex"}
+      {:hashex, github: "timCF/hashex"},
+      {:idna, github: "benoitc/erlang-idna", override: true}
     ]
   end
 end

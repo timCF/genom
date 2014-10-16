@@ -7,7 +7,7 @@
   "hackney": {:hex, :hackney, "0.14.1"},
   "hashex": {:git, "git://github.com/timCF/hashex.git", "fc9b3704fd51861e19739f5483b70a36d415041f", []},
   "httpoison": {:git, "git://github.com/edgurgel/httpoison.git", "200c269d11b7978158183defe37561e491fcc6fe", []},
-  "idna": {:hex, :idna, "1.0.1"},
+  "idna": {:git, "git://github.com/benoitc/erlang-idna.git", "d039e10876fbcd63fe2a97adb99239ba5a99efc7", []},
   "jazz": {:git, "git://github.com/meh/jazz.git", "49f335492aca5516495199dd81dd18b845ebaa69", []},
   "ranch": {:git, "git://github.com/extend/ranch.git", "adf1822defc2b7cfdc7aca112adabfa1d614043c", [ref: "1.0.0"]},
   "retry": {:git, "git://github.com/d0rc/retry.git", "6f1f744fc4f002bc763383e0e872e5bf0dec6b3e", []},
