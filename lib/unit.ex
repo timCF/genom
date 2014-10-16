@@ -15,7 +15,7 @@ defmodule Genom.Unit do
 	end
 
 	definit do
-		#Genom.add_info("GENOM supervisor otp-app.", :info)
+		Genom.add_info("GENOM supervisor otp-app.", :info)
 		{
 			:ok, 
 			( create_state

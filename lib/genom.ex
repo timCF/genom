@@ -51,7 +51,7 @@ defmodule Genom do
     opts = [strategy: :one_for_one, name: Genom.Supervisor]
     Supervisor.start_link(children, opts)
   end
-
+  def stop(_), do: :erlang.halt
 
   # get here other hosts settings, own port, generate own id, and store all this info to hash
   defp store_my_info_to_hash env do
