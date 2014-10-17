@@ -1,0 +1,30 @@
+html, body {
+    background-color: black;
+}
+.host
+{   
+    font-size: 200%;
+    color: black;
+    border:5px solid grey;
+    margin:10px;
+    padding: 15px;
+    border-radius: 30px 15px;
+}
+.app
+{   
+    font-size: 80%;
+    color: black;
+    border:5px solid grey;
+    margin:10px;
+    padding: 15px;
+    border-radius: 30px 15px;
+}
+.app_content
+{   
+    font-size: 90%;
+    color: black;
+    border:5px solid grey;
+    margin:10px;
+    padding: 15px;
+    border-radius: 30px 15px;
+}

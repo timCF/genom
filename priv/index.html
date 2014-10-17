@@ -4,6 +4,7 @@
     <title>GENOM supervisor</title>
     <!-- Bootstrap -->
     <link href="./css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="./css/style.css" rel="stylesheet" media="screen">
     <script src="./js/jquery.js"></script>
     <script src="./js/bullet.js"></script>
     <script src="./js/angular.js"></script>
@@ -15,7 +16,7 @@
   </head>
   <body ng-controller="my_controller" ng-init="init()">
     <!-- LOCALHOST -->
-    <div ng-style="generate_host_style(state.my_info.status)">
+    <div class="host" ng-style="generate_host_style(state.my_info.status)">
     <!-- header -->
       <div class="row-fluid">
         <div class="span1">
@@ -41,7 +42,7 @@
         </div>
       </div>
       <!-- master app -->
-      <div ng-style="generate_app_style(state.my_info.status)">
+      <div class="app" ng-style="generate_app_style(state.my_info.status)">
         <div class="row-fluid">
           <div class="span1">
             APP_NAME <br>
@@ -62,7 +63,7 @@
             {{state.my_info.stamp}}<br><br>
           </div>
         </div>
-        <div ng-repeat="(module, moduleinfo) in state.my_info.modules_info">
+        <div class="app_content" ng-repeat="(module, moduleinfo) in state.my_info.modules_info">
           <div class="row-fluid">
             <div class="span2"> 
               {{module}}
@@ -79,7 +80,7 @@
       </div>
       <!-- slaves -->
       <div ng-repeat=" (id, appinfo) in state.slaves_info">
-        <div ng-style="generate_app_style(appinfo.status)">
+        <div class="app" ng-style="generate_app_style(appinfo.status)">
           <div class="row-fluid">
             <div class="span1">
               APP_NAME <br>
@@ -100,7 +101,7 @@
               {{appinfo.stamp}}<br><br>
             </div>
           </div>
-          <div ng-repeat="(module, moduleinfo) in appinfo.modules_info">
+          <div class="app_content" ng-repeat="(module, moduleinfo) in appinfo.modules_info">
             <div class="row-fluid">
               <div class="span2"> 
                 {{module}}
@@ -117,9 +118,10 @@
         </div>
       </div>
     </div>
+    <br>
     <!-- OTHER HOSTS HERE -->
     <div ng-repeat="host in state.other_hosts">
-      <div ng-style="generate_host_style(host.status)">
+      <div class="host" ng-style="generate_host_style(host.status)">
       <!-- header -->
         <div class="row-fluid">
           <div class="span1">
@@ -146,7 +148,7 @@
         </div>
         <!-- apps -->
         <div ng-repeat=" (id, appinfo) in host.apps">
-          <div ng-style="generate_app_style(appinfo.status)">
+          <div class="app" ng-style="generate_app_style(appinfo.status)">
             <div class="row-fluid">
               <div class="span1">
                 APP_NAME <br>
@@ -167,7 +169,7 @@
                 {{appinfo.stamp}}<br><br>
               </div>
             </div>
-            <div ng-repeat="(module, moduleinfo) in appinfo.modules_info">
+            <div class="app_content" ng-repeat="(module, moduleinfo) in appinfo.modules_info">
               <div class="row-fluid">
                 <div class="span2"> 
                   {{module}}
@@ -184,7 +186,7 @@
           </div>
         </div>
       </div>
-      <hr>
+      <br>
     </div>
   </body>
 </html>
