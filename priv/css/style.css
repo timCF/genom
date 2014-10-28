@@ -1,5 +1,21 @@
 html, body {
     background-color: black;
+    overflow: auto;
+}
+.table
+{
+    border-color: black;
+}
+.overflow
+{
+    overflow: auto;
+}
+.my_navbar
+{
+    font-size: 200%;
+    color: black;
+    border:5px solid grey;
+    opacity: 0.9;
 }
 .host
 {   

@@ -10,6 +10,8 @@ config :genom, app: :my_otp_app, port: 8998, comment: "my otp application"
 ```
 (note: this port must be opened!)
 
+You also can define option ```permanent_slave: true```. If this option was set, this app will not try to became master, it just will try report self state to master in this host.
+
 If you want to send info about state of your application to other hosts, add genom.yml to priv dir of application.  This file must contain something like this:
 
 ```

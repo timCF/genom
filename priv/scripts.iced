@@ -3,6 +3,15 @@ controllers = {}
 
 
 controllers.my_controller = ($scope, $http, $interval, $sanitize) ->
+	$scope.my_custom_filter = (map, str) ->
+		if (str==null) or (str==undefined) or (str=="")
+			map
+		else
+			new_map = {}
+			for key, val of map
+				if key.indexOf(str) != -1
+					new_map[key] = val
+			new_map
 	$scope.init_const = () ->
 		$scope.const = {}
 		$scope.const.colors = {}

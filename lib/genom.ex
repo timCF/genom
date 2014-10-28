@@ -59,6 +59,7 @@ defmodule Genom do
     store_port(env)
     store_appname(env)
     store_comment(env)
+    store_perm_slave_option(env)
     Exutils.makecharid |> Tinca.put(:my_id)
   end
   defp store_hosts conf_filename do
@@ -88,6 +89,13 @@ defmodule Genom do
     case env[:comment] do
       nil -> Tinca.put( "", :my_comment )
       some when is_binary(some) -> Tinca.put(some, :my_comment)
+    end
+  end
+  defp store_perm_slave_option(env) do
+    case env[:permanent_slave] do
+      nil -> Tinca.put(false, :perm_slave_option)
+      false -> Tinca.put(false, :perm_slave_option)
+      true -> Tinca.put(true, :perm_slave_option)
     end
   end
 

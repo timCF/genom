@@ -7,6 +7,21 @@
   controllers = {};
 
   controllers.my_controller = function($scope, $http, $interval, $sanitize) {
+    $scope.my_custom_filter = function(map, str) {
+      var key, new_map, val;
+      if ((str === null) || (str === void 0) || (str === "")) {
+        return map;
+      } else {
+        new_map = {};
+        for (key in map) {
+          val = map[key];
+          if (key.indexOf(str) !== -1) {
+            new_map[key] = val;
+          }
+        }
+        return new_map;
+      }
+    };
     $scope.init_const = function() {
       $scope["const"] = {};
       $scope["const"].colors = {};

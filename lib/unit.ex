@@ -15,12 +15,14 @@ defmodule Genom.Unit do
 	end
 
 	definit do
-		#Genom.add_info("GENOM supervisor otp-app.", :info)
+		Genom.add_info("GENOM supervisor otp-app.", :info)
+		Genom.add_info("GENOM supervisor some otp-app.", :some_info)
 		{
 			:ok, 
 			( create_state
-				|> main_slave_handler
-					|> update_stamp  ),
+				|> encode_and_put_to_cache # to prevent fall if user want to see state now
+					|> main_slave_handler
+						|> update_stamp  ),
 			@timeout
 		}
 	end
@@ -128,7 +130,11 @@ defmodule Genom.Unit do
 	defp main_slave_handler(old_state) do
 		state = refresh_self(old_state)
 		case report_to_master(state) do
-			:failed -> become_master(state) |> main_master_handler
+			:failed -> 
+				case Genom.Tinca.get(:perm_slave_option) do
+					true -> state
+					false -> become_master(state) |> main_master_handler
+				end
 			:ok -> state
 		end
 	end
