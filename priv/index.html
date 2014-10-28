@@ -18,7 +18,7 @@
     <!-- navigation panel -->
     <nav class="navbar navbar-default navbar-fixed-top my_navbar" role="navigation" ng-style="{'background-color':'lightgrey', 'height' : '45px'}">
       <div class="container-fluid">
-        <input type="text" ng-model="search_module" placeholder="MODULE"> <input type="text" ng-model="search_key" placeholder="KEY">
+        <input type="text" ng-model="search_key" placeholder="KEY"> <input type="text" ng-model="search_module" placeholder="MODULE">
       </div>
     </nav>
     <!-- LOCALHOST -->
@@ -114,7 +114,7 @@
               </tbody>
             </table>
           </div>
-          <div class="app_content" ng-repeat="(module, moduleinfo) in appinfo.modules_info">
+          <div class="app_content" ng-repeat="(module, moduleinfo) in my_custom_filter(appinfo.modules_info, search_module)">
             <div class="row-fluid">
               <h3>MODULE : {{module}}</h3>
               <br>
@@ -127,7 +127,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="(key, val) in moduleinfo"> 
+                  <tr ng-repeat="(key, val) in my_custom_filter(moduleinfo, search_key)"> 
                     <td>{{key}}</td>
                     <td>date : {{val.stamp}}</td>
                     <td>value : {{val.value}}</td>
@@ -145,63 +145,70 @@
       <div class="host" ng-style="generate_host_style(host.status)">
       <!-- header -->
         <div class="row-fluid">
-          <div class="span1">
-            HOST<br>
-            PORT<br>
-            STAMP<br>
-            STATUS<br>
-            COMMENT<br><br>
-          </div>
-          <div class="span1">
-            :<br>
-            :<br>
-            :<br>
-            :<br>
-            :<br><br>
-          </div>
-          <div class="span1">
-            {{host.host}}<br>
-            {{host.port}}<br>
-            {{host.stamp}}<br>
-            {{host.status}}<br>
-            {{host.comment}}<br><br>
-          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>HOST</th>
+                <th>PORT</th>
+                <th>STAMP</th>
+                <th>STATUS</th>
+                <th>COMMENT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{host.host}}</td>
+                <td>{{host.port}}</td>
+                <td>{{host.stamp}}</td>
+                <td>{{host.status}}</td>
+                <td>{{host.comment}}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <!-- apps -->
         <div ng-repeat=" (id, appinfo) in host.apps">
           <div class="app" ng-style="generate_app_style(appinfo.status)">
             <div class="row-fluid">
-              <div class="span1">
-                APP_NAME <br>
-                ROLE<br>
-                STATUS<br>
-                STAMP<br><br>
-              </div>
-              <div class="span1">
-                :<br>
-                :<br>
-                :<br>
-                :<br><br>
-              </div>
-              <div class="span10">
-                {{appinfo.name}}<br>
-                {{appinfo.role}}<br>
-                {{appinfo.status}}<br>
-                {{appinfo.stamp}}<br><br>
-              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>APP_NAME</th>
+                    <th>ROLE</th>
+                    <th>STATUS</th>
+                    <th>STAMP</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{appinfo.name}}</td>
+                    <td>{{appinfo.role}}</td>
+                    <td>{{appinfo.status}}</td>
+                    <td>{{appinfo.stamp}}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <div class="app_content" ng-repeat="(module, moduleinfo) in appinfo.modules_info">
+            <div class="app_content" ng-repeat="(module, moduleinfo) in my_custom_filter(appinfo.modules_info, search_module)">
               <div class="row-fluid">
-                <div class="span2"> 
-                  {{module}}
-                </div>
-                <div class="span10">
-                  <div ng-repeat="(key, val) in moduleinfo">
-                    key : {{key}}<br>
-                    date : {{val.stamp}}<br>
-                    value : {{val.value}}<br><br>
-                  </div>
-                </div>
+                <h3>MODULE : {{module}}</h3>
+                <br>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>key</th>
+                      <th>date</th>
+                      <th>value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="(key, val) in my_custom_filter(moduleinfo, search_key)"> 
+                      <td>{{key}}</td>
+                      <td>date : {{val.stamp}}</td>
+                      <td>value : {{val.value}}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

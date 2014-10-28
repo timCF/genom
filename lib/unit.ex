@@ -15,8 +15,8 @@ defmodule Genom.Unit do
 	end
 
 	definit do
-		Genom.add_info("GENOM supervisor otp-app.", :info)
-		Genom.add_info("GENOM supervisor some otp-app.", :some_info)
+		#Genom.add_info("GENOM supervisor otp-app.", :info)
+		#Genom.add_info("GENOM supervisor some otp-app.", :some_info)
 		{
 			:ok, 
 			( create_state
@@ -145,7 +145,7 @@ defmodule Genom.Unit do
 				|> :base64.encode
 					|>  try_report_to_master(my_port) do
 			{:ok, _} -> :ok
-			err -> 	Logger.warn "Genom.Unit : report to master failed, code is #{inspect err}"
+			_err -> 	#Logger.warn "Genom.Unit : report to master failed, code is #{inspect err}"
 					:failed
 		end
 	end
@@ -178,7 +178,7 @@ defmodule Genom.Unit do
 
 	defp refresh_slaves(state = %MasterState{}) do
 		HashUtils.modify_all(state, :slaves_info, 
-			fn(appinfo) -> IO.inspect appinfo
+			fn(appinfo) ->
 				stamp = appinfo.stamp
 				case (Exutils.makestamp - stamp) > @slave_death_timeout do
 					true -> HashUtils.set(appinfo, :status, :dead)
@@ -204,7 +204,6 @@ defmodule Genom.Unit do
 			end )
 	end
 	defp encode_and_put_to_cache state do
-		IO.puts "encode_and_put_to_cache"
 		%Genom.Bullet.WebProtocol{ subject: "refresh", content: Exutils.prepare_to_jsonify(state, %{tuple_values_to_lists: true}) }
 			|> Jazz.encode!
 				|> Genom.Tinca.put(:web_view_cache)
@@ -242,7 +241,7 @@ defmodule Genom.Unit do
 	defp try_send_my_hostinfo(host, port, my_hostinfo_bin) do
 		case Retry.run( %{sleep: 500, tries: 5}, fn() -> try_send_my_hostinfo_process(host, port, my_hostinfo_bin) end ) do
 			{:ok, _} -> :ok
-			err -> 	Logger.warn "Genom.Unit : exchange with host #{host}:#{port} failed, code is #{inspect err}"
+			_err -> 	#Logger.warn "Genom.Unit : exchange with host #{host}:#{port} failed, code is #{inspect err}"
 					:failed
 		end
 	end

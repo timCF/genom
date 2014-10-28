@@ -26,7 +26,7 @@ defmodule Genom.WebhandlerTemplate do
 			#################################
 
 			defp reply(ans, req, opts) when is_binary(ans) do
-				IO.puts "Genom.Server : send answer #{ans}"
+				#IO.puts "Genom.Server : send answer #{ans}"
 				{:ok, req_fin} = :cowboy_req.reply(200, [{"content-type", "text/plain"}], ans, req)
 				{:ok, req_fin, opts}
 			end

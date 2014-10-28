@@ -14,13 +14,13 @@ defmodule Genom.External do
 	require Logger
 	use Genom.WebhandlerTemplate
 	def handle(req, {:ok, host_info = %Genom.HostInfo{}, opts}) do
-		Logger.warn "got mess from another host #{get_host(req)} \n #{inspect host_info}"
+		#Logger.warn "got mess from another host #{get_host(req)} \n #{inspect host_info}"
 		HashUtils.set(host_info, :host, get_host(req))
 			|> Genom.Unit.add_hostinfo
 		reply("ok",req, opts)
 	end
 	def handle(req, {:ok, some_term, opts}) do
-		Logger.error "got WRONG mess from another host #{get_host(req)} #{inspect some_term}"
+		Logger.error "Genom : got WRONG mess from another host #{get_host(req)} #{inspect some_term}"
 		"Genom.External : error, expect term %Genom.HostInfo{}, but got #{inspect some_term}"
 			|> reply(req, opts)
 	end
@@ -47,7 +47,7 @@ defmodule Genom.Bullet do
 
 	def init(_Transport, req, _Opts, _Active) do
 		:pg2.join "web_viewers", self
-		Logger.info "Bullet handler: init"
+		#Logger.info "Bullet handler: init"
 		{:ok, req, :undefined_state}
 	end
 
@@ -71,13 +71,13 @@ defmodule Genom.Bullet do
 		}
 	end
 	def info(info, req, state) do
-		Logger.warn "Bullet handler: unexpected info #{inspect info}"
+		Logger.warn "Genom : Bullet handler : unexpected info #{inspect info}"
 		{:ok, req, state}
 	end
 
-	def terminate(req, state) do
+	def terminate(_req, _state) do
 		:pg2.leave "web_viewers", self
-		Logger.warn "Bullet handler: terminate #{inspect req} and #{inspect state}"
+		#Logger.warn "Bullet handler: terminate #{inspect req} and #{inspect state}"
 	end
 
 	#############################################
