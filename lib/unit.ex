@@ -48,15 +48,32 @@ defmodule Genom.Unit do
 	definfo :timeout, state: state = %SlaveState{} do
 		{
 			:noreply,
-			main_slave_handler(state),
+			main_slave_handler(state) |> update_stamp,
 			@timeout
 		}
 	end
 	definfo :timeout, state: state = %MasterState{} do
 		{
 			:noreply,
-			( main_master_handler(state) |> update_stamp ),
+			main_master_handler(state) |> update_stamp,
 			@timeout
+		}
+	end
+
+	definfo some, state: state = %SlaveState{stamp: stamp} do
+		Logger.error "Genom : got unexpected message #{inspect some}"
+		{
+			:noreply,
+			main_slave_handler(state),
+			calculate_timeout(stamp)
+		}
+	end
+	definfo some, state: state = %MasterState{stamp: stamp} do
+		Logger.error "Genom : got unexpected message #{inspect some}"
+		{
+			:noreply,
+			main_master_handler(state),
+			calculate_timeout(stamp)
 		}
 	end
 
@@ -117,8 +134,7 @@ defmodule Genom.Unit do
 	defp calculate_timeout(stamp) when is_integer(stamp) do
 		case (stamp + @timeout) - Exutils.makestamp do
 			some when (some > 0) -> some
-			_ -> 	send(self, :timeout)
-							0
+			_ -> 0
 		end
 	end
 
