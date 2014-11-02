@@ -4,7 +4,7 @@ defmodule Genom.ModulesCacheWriter do
 
 	definit do
 		case Genom.Tinca.get(:modules_info) do
-			:not_found -> {:ok, Genom.Tinca.put(%{}, :modules_info)}
+			nil -> {:ok, Genom.Tinca.put(%{}, :modules_info)}
 			state when is_map(state) -> {:ok, state}
 		end
 	end

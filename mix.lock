@@ -11,5 +11,5 @@
   "jazz": {:git, "git://github.com/meh/jazz.git", "49f335492aca5516495199dd81dd18b845ebaa69", []},
   "ranch": {:git, "git://github.com/extend/ranch.git", "adf1822defc2b7cfdc7aca112adabfa1d614043c", [ref: "1.0.0"]},
   "retry": {:git, "git://github.com/d0rc/retry.git", "6f1f744fc4f002bc763383e0e872e5bf0dec6b3e", []},
-  "tinca": {:git, "git://github.com/timCF/tinca.git", "0682148a9452052b52e5476273b551ec57dcde9c", []},
+  "tinca": {:git, "git://github.com/timCF/tinca.git", "9f21725c0258707cff56f9e70e532d45a0c2647b", []},
   "yamler": {:git, "git://github.com/goertzenator/yamler.git", "5084e38b7bf34fa74d1d064b3eec5cc185e6ca4b", [branch: "mapping_as_map"]}}
