@@ -14,7 +14,13 @@ defmodule Genom do
 
   defmacro add_info(value, key) do
     quote do
-      Genom.ModulesCacheWriter.add_info(__MODULE__, unquote(key), %{stamp: Exutils.make_verbose_datetime, value: unquote(value)} )
+      val = unquote(value) # !! to not execute expr "value" twice
+      case ExTask.run(fn() -> Genom.ModulesCacheWriter.add_info(__MODULE__, unquote(key), %{stamp: Exutils.make_verbose_datetime, value: val} ) end)
+            |> ExTask.await(:timer.seconds(10)) do
+        {:result, res} -> res
+        error ->  Logger.error "GENOM : Value was not stored. Val was #{inspect val}. Error : #{inspect error}."
+                  val
+      end
     end
   end
 

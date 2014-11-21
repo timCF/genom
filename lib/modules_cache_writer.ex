@@ -8,7 +8,7 @@ defmodule Genom.ModulesCacheWriter do
 			state when is_map(state) -> {:ok, state}
 		end
 	end
-	defcall add_info(module, key, value = %{value: val}), state: state do
+	defcall add_info(module, key, value = %{value: val}), state: state, timeout: :timer.seconds(10) do
 		{
 			:reply,
 			val,
