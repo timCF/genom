@@ -1,13 +1,22 @@
 defmodule Genom do
   use Application
   use Tinca, [:genom_cache]
+  use Hashex, [Genom.Host, Genom.AppInfo, Genom.HostInfo]
   require Logger
 
   @default_port 8999
 
   defmodule Host do
-    @derive [HashUtils]
     defstruct host: nil, port: nil, comment: ""
+  end
+
+  # role = :master | :slave
+  # status = :alive | :dead
+  defmodule AppInfo do
+    defstruct id: nil, name: nil, role: :slave, status: :alive, modules_info: nil, port: nil, stamp: 0, comment: ""
+  end
+  defmodule HostInfo do
+    defstruct apps: %{}, host: nil, port: nil, stamp: 0, status: :dead, comment: ""
   end
 
 
@@ -18,24 +27,12 @@ defmodule Genom do
       case ExTask.run(fn() -> Genom.ModulesCacheWriter.add_info(__MODULE__, unquote(key), %{stamp: Exutils.make_verbose_datetime, value: val} ) end)
             |> ExTask.await(:timer.seconds(10)) do
         {:result, res} -> res
-        error ->  Logger.error "GENOM : Value was not stored. Val was #{inspect val}. Error : #{inspect error}."
+        error ->  Logger.warn "GENOM : Value was not stored. Val was #{inspect val}. Error : #{inspect error}."
                   val
       end
     end
   end
 
-
-
-  # role = :master | :slave
-  # status = :alive | :dead
-  defmodule AppInfo do
-    @derive [HashUtils]
-    defstruct id: nil, name: nil, role: :slave, status: :alive, modules_info: nil, port: nil, stamp: 0, comment: ""
-  end
-  defmodule HostInfo do
-    @derive [HashUtils]
-    defstruct apps: %{}, host: nil, port: nil, stamp: 0, status: :dead, comment: ""
-  end
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications

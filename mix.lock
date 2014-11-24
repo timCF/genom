@@ -5,7 +5,7 @@
   "extask": {:git, "git://github.com/timCF/extask.git", "4164dddf3135c44623d77e9cba07324595353d6b", []},
   "exutils": {:git, "git://github.com/timCF/exutils.git", "8cdc6adcbaa5ea473c7172c83906b6e83cf3a4c6", []},
   "hackney": {:hex, :hackney, "0.14.1"},
-  "hashex": {:git, "git://github.com/timCF/hashex.git", "fc9b3704fd51861e19739f5483b70a36d415041f", []},
+  "hashex": {:git, "git://github.com/timCF/hashex.git", "ec25a9bf19a0da76235a36758605674c5fcc5434", []},
   "httpoison": {:git, "git://github.com/edgurgel/httpoison.git", "200c269d11b7978158183defe37561e491fcc6fe", []},
   "idna": {:git, "git://github.com/benoitc/erlang-idna.git", "d039e10876fbcd63fe2a97adb99239ba5a99efc7", []},
   "jazz": {:git, "git://github.com/meh/jazz.git", "49f335492aca5516495199dd81dd18b845ebaa69", []},

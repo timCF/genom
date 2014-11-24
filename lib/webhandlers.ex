@@ -33,11 +33,11 @@ end
 
 defmodule Genom.Bullet do
 
+	use Hashex, [Genom.Bullet.WebProtocol]
 	require Logger
 	@pong (%{subject: "pong", content: ""} |> Jazz.encode!)
 
 	defmodule WebProtocol do
-		@derive [HashUtils]
 		defstruct subject: "error", content: nil
 	end
 

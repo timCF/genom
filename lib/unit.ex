@@ -1,16 +1,15 @@
 defmodule Genom.Unit do
 	
 	use ExActor.GenServer, export: :GenomUnit
+	use Hashex, [Genom.Unit.MasterState, Genom.Unit.SlaveState]
 	require Logger
 	require Genom
 	@timeout :timer.minutes(1)
 
 	defmodule MasterState do
-		@derive [HashUtils]
 		defstruct my_info: %Genom.AppInfo{}, slaves_info: %{}, other_hosts: [], stamp: 0
 	end
 	defmodule SlaveState do
-		@derive [HashUtils]
 		defstruct my_info: %Genom.AppInfo{}, stamp: 0
 	end
 
